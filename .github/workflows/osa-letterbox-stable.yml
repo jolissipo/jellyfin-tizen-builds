@@ -9,7 +9,7 @@ permissions:
 jobs:
   build:
     name: Build OSA Letterbox (12.4)
-    uses: ./.github/workflows/build-new-release.yml@osa-letterbox-v12-4-test
+    uses: jolissipo/jellyfin-tizen-builds/.github/workflows/build-new-release.yml@osa-letterbox-v12-4-test
     with:
       webReleaseTagName: v12.4
       webPrereleaseTagName: v12.4
