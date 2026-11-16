@@ -1,149 +1,59 @@
-# jellyfin-tizen-builds
+# Jellyfin OSA AVPlayFix
 
-The purpose of this repository is to automatically build the most up-to-date version of jellyfin-tizen.
+A customized **Jellyfin client for Samsung Tizen TVs**, based on the OSA variant with Samsung **AVPlay** video playback and Smart Hub integration. This project preserves HDR/HDR10+ playback while fixing incorrect video aspect ratios and subtitle handling.
 
-For real-time-ish communications, you can join my [Discord server](https://discord.gg/DGnRQUJ).
+## Fixes and features
 
-## Related Projects
-This repository only handles the automated building and packaging of the Jellyfin Tizen app. The following upstream projects are responsible for the actual implementation:
+- **Correct aspect ratio:** Enables `PLAYER_DISPLAY_MODE_LETTER_BOX` to preserve the original video proportions, including black bars on widescreen 4K content.
+- **Subtitle selection menu:** Restores compatibility between the OSA player and the Jellyfin Web subtitle menu.
+- **Embedded subtitle selection:** Maps Jellyfin subtitle stream indices to AVPlay's native track indices and restores subtitles when switching tracks.
+- **External subtitles:** Renders subtitle events supplied by the Jellyfin server in an HTML overlay, without replacing AVPlay as the video player.
+- **Subtitle appearance:** Uses Jellyfin's subtitle preferences for the external subtitle overlay, including text size, font family and weight, color, shadow, background, and vertical positioning.
 
-| Project | Description |
-|---------|-------------|
-| [jellyfin/jellyfin-tizen](https://github.com/jellyfin/jellyfin-tizen) | The Samsung Tizen wrapper app that this repository builds |
-| [jellyfin/jellyfin-web](https://github.com/jellyfin/jellyfin-web) | The Jellyfin web client bundled inside the app |
+The client retains the OSA variant's AVPlay integration, horizontal app icon, and Smart Hub support. HDR/HDR10+ activation also depends on the media and the TV's capabilities.
 
-> **Note:** If you experience runtime issues with the app itself (e.g. playback problems, UI bugs, missing features), please check and report those issues in the relevant upstream repository above rather than here. This repository only produces the build artifacts and is not the right place to address such issues.
+## Downloads
 
-## Versions
+Download the desired `.wgt` package from [Releases](../../releases).
 
-| File name    | Description                                                                                                                                                                                                             |
-|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Jellyfin.wgt | Built with the latest stable release of jellyfin-web                                                                                                                                                                    |
-| 10.11.z      | Built with the bleeding edge of the branch for the 10.11.z releases                                                                                                                                                     |
-| 10.10.z      | Built with the bleeding edge of the branch for the 10.10.z releases                                                                                                                                                     |
-| master       | Built with the latest potentially unstable changes to jellyfin-web code (this will always be the newest possible version)                                                                                               |
-| secondary    | Built with the latest stable release of jellyfin-web and a different app ID to allow having a second account signed in                                                                                                  |
-| OblongIcon   | Use oblong type icon for TVs required it.  See more detail: jellyfin/jellyfin-tizen#171                                                                                                                                 |
-| GrayFix      | Potentially fixes an issue where the bars over and under the video are gray.  See more detail: jellyfin/jellyfin-tizen#65                                                                                               |
-| SmartHub     | Add Samsung Smart Hub Preview integration. See more detail: jellyfin/jellyfin-tizen#318                                                                                                                                 |
-| OSA          | This combines the OblongIcon and SmartHub builds as well as experimental support for the AVPlay player for improved codec support                                                                                       |
-| TrailerFix   | Fixes YouTube trailer playback (error 153) on newer Tizen OS versions, adapted from [Apps2Samsung](https://github.com/Apps2Samsung/Apps2Samsung) by @PatrickSt1991. See more detail: jellyfin/jellyfin-tizen/issues/374 |
+| Package | Jellyfin Web base | Tested on a Samsung TV |
+| --- | --- | --- |
+| `Jellyfin-OSA-AVPlayFix.wgt` | Latest stable release (12.4 at the time of writing) | **Yes** |
+| `Jellyfin-12.z-OSA-AVPlayFix.wgt` | `release-12.z` maintenance branch | **Yes** |
+| `Jellyfin-10.11.z-OSA-AVPlayFix.wgt` | `release-10.11.z` maintenance branch | **Not yet confirmed** |
 
-*Disclaimer: I don't have many success stories with TVs older than 2018, but a few people in my Discord server have reported it working for their 2015 and 2016 TVs with the `10.8.z` version. This version is not included in new releases, but can be found [here](https://github.com/jeppevinkel/jellyfin-tizen-builds/releases/tag/2024-10-27-1821)*
-
-## Compatibility
-
-There is a markdown file at [COMPATIBILITY.md](COMPATIBILITY.md) with the purpose of creating a list of TVs that are known to either work or not work.
-
-This list is intended to be community maintained, and anyone is free to create new additions for the list as you discover new TVs that either do or don't work.
+All three packages use the same Tizen application ID. Install only one variant at a time.
 
 ## Installation
 
-For a GUI installer that automates most of the process, check out this program made by PatrickSt1991 [Apps2Samsung/Apps2Samsung](https://github.com/Apps2Samsung/Apps2Samsung).  
-For a one-step install process using Docker, check out this guide made by Georift [Georift/install-jellyfin-tizen](https://github.com/Georift/install-jellyfin-tizen).  
-*I have no affiliation with these installers and I can't provide support related to them. Both of the installers directly use the builds I provide here.*
+1. Download your preferred `.wgt` package from [Releases](../../releases).
+2. Import it through the custom package installation option in **Apps2Samsung**.
+3. Re-sign the package for your TV and install it.
 
-### Prerequisites
+The published packages use a temporary build certificate and must be signed with a certificate compatible with your device.
 
-- Tizen Studio with CLI (https://developer.tizen.org/development/tizen-studio/download)
-- Visual C++ Redistributable Packages for VS 2013 x86 and amd64 (https://www.microsoft.com/en-US/download/details.aspx?id=40784)
-- One of the .wgt files from a release (https://github.com/jeppevinkel/jellyfin-tizen-builds/releases)
+## Updating and building
 
-### Getting Started
+Two workflows are available under [Actions](../../actions):
 
-1. Install prerequisites. Yup nothing else needed.
+- **Build Jellyfin OSA AVPlayFix:** Resolves the latest Jellyfin Web versions, pins their exact commit SHAs, builds all three packages, and publishes a GitHub Release **only if all three builds succeed**.
+- **Get Latest Versions:** Refreshes `versions.json` and `matrix.json` when upstream tags or branch commits change. It does not build packages.
 
-### Deploy to TV
+The build workflow resolves upstream versions independently, so running **Get Latest Versions** beforehand is optional.
 
-1. Activate Developer Mode on TV (https://developer.samsung.com/tv/develop/getting-started/using-sdk/tv-device).
-2. Connect to TV with Device Manager from Tizen Studio. Typically located in `C:\tizen-studio\tools\device-manager\bin`
-3. Install the package.  
-   This command assumes the file you are installing is called `Jellyfin.wgt`. Simply change it to `Jellyfin-prerelease.wgt` if you are installing the prerelease version. Otherwise you can also just rename the file.
+## Compatibility notes
 
-```bash
-c:\tizen-studio\tools\ide\bin\tizen.bat install -n Jellyfin.wgt -t <the name of your tv>
-```
+- **Tested hardware:** Samsung **UE50RU7105KXXC**, running **Tizen 5.0**.
+- **Verified builds:** the stable and 12.z versions were tested successfully on this TV, including HDR/HDR10+ playback, correct letterboxing, and external subtitles.
+- **Declared minimum OS version:** **Tizen 2.3**, as specified by `required_version="2.3"` in the OSA Tizen application's `config.xml`. This is a package-level requirement, **not** confirmation that AVPlayFix has been tested on every Tizen version from 2.3 onwards.
+- The **10.11.z** version has not yet been verified on a physical TV.
+- Subtitle appearance settings apply to the **external subtitle overlay**. Embedded subtitles rendered directly by AVPlay may still follow Samsung's native subtitle styling.
+- Advanced ASS/SSA styling is not necessarily reproduced in full by the text overlay.
 
-On Mac the command is instead
+## Source and licensing
 
-```bash
-$HOME/tizen-studio/tools/ide/bin/tizen install -n Jellyfin.wgt -t <the name of your tv>
-```
+The letterbox fix implements the AVPlay display-mode change proposed by [@buddhaCode in issue #113](https://github.com/jeppevinkel/jellyfin-tizen-builds/issues/113): calling `PLAYER_DISPLAY_MODE_LETTER_BOX` before setting the display rectangle.
 
-typically located in (C:\tizen-studio\tools\ide\bin)
-> You can find your tv name in Device Manager from Tizen Studio or using `sdb devices`.  
+The customized AVPlay player is in [`patches/osa/avplayVideoPlayer.js`](patches/osa/avplayVideoPlayer.js). The aspect-ratio patch is applied by [`scripts/apply-letterbox.py`](scripts/apply-letterbox.py).
 
-## Common issues
-
-### Runtime issues with the app (playback, UI, features)?
-This repository is only responsible for building and packaging the app, it does not control the app's behaviour or the web client (with exception of features specifically mentioned in specialty builds).
-
-- For issues with the **Tizen wrapper** (crashes, app-level bugs, Tizen-specific behaviour): report to [jellyfin/jellyfin-tizen](https://github.com/jellyfin/jellyfin-tizen/issues)
-- For issues with the **web client** (UI bugs, playback issues, missing features): report to [jellyfin/jellyfin-web](https://github.com/jellyfin/jellyfin-web/issues)
-
-Please check the existing issues in those repositories before opening a new one, as your problem may already be known and tracked there.
-
-### Install failing due to wrong certificate?
-
-This should only happen if you already have a version installed using a different build certificate.  
-This can be solved by uninstalling the app prior to attempting to install this version.
-
-Removing it from the app bar is not the same as removing it from the device, you need to actually go into the applications menu and remove it from there.
-
-### Where do I find `sdb`?
-
-If you installed Tizen Studio with CLI correctly, then you should find the `sdb` tool:
-
-On Windows
-
-```bash
-c:\tizen-studio\tools\sdb
-```
-
-On Mac
-
-```bash
-$HOME/tizen-studio/tools/sdb
-```
-
-On Linux
-
-```bash
-~/tizen-studio/tools/sdb
-```
-
-### The `sdb devices` command returns only this message "List of devices attached":
-
-If you enabled developer mode on your TV correctly, then you need to do the following:
-
-- Make sure the TV and the computer running the Tizen Studio with CLI are connected to the same network (for example, the same Wi-Fi)
-- Discover the IP address of your TV. You can check the IP of your TV in the Settings > General > Network > Network Status > IP Settings. Or check this depending of your TV model (https://www.samsung.com/ca/support/tv-audio-video/verify-network-status-on-your-samsung-tv/)
-
-Once you have the IP address of your TV connect to it by running this command:
-
-On Windows
-
-```bash
-c:\tizen-studio\tools\sdb connect <IP of your TV>
-```
-
-On Mac
-
-```bash
-$HOME/tizen-studio/tools/sdb connect <IP of your TV>
-```
-
-On Linux
-
-```bash
-~/tizen-studio/tools/sdb connect <IP of your TV>
-```
-
-You should see a message like:
-
-```bash
-connecting to <IP of your TV>:26101 ...
-connected to <IP of your TV>:26101
-```
-
-If you execute `sdb devices` you should now see your TV in the list, including the name used in the "Deploy to TV" section.
+This project uses Jellyfin Web and Jellyfin Tizen/OSA components. Their applicable licenses remain in effect; see the repository's [Mozilla Public License 2.0](LICENSE).

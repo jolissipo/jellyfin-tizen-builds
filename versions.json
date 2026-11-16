@@ -1,48 +1,22 @@
 {
-  "commits": [
-    {
-      "owner": "jellyfin",
-      "repo": "jellyfin-tizen",
-      "ref": "master",
-      "name": "master",
-      "matrix": false,
-      "latest": "31408c121e34e73c9f50c4e201c05e95140675df"
-    },
-    {
-      "owner": "jellyfin",
-      "repo": "jellyfin-web",
-      "ref": "release-10.11.z",
-      "name": "10.11.z",
-      "matrix": true,
-      "latest": "35c0793ece3adbd247eab290ae1effab851f3d37"
-    },
-    {
-      "owner": "jellyfin",
-      "repo": "jellyfin-web",
+  "web_repository": "jellyfin/jellyfin-web",
+  "stable": {
+    "ref": "v12.4",
+    "sha": "0a580ce8df89282dfd120b6d5efb8e106da23bd5"
+  },
+  "branches": {
+    "12.z": {
       "ref": "release-12.z",
-      "name": "12.z",
-      "matrix": true,
-      "node24": true,
-      "latest": "8bc18bab760b8d849567edeac17f533e4c7aa1cb"
+      "sha": "8bc18bab760b8d849567edeac17f533e4c7aa1cb"
     },
-    {
-      "owner": "jellyfin",
-      "repo": "jellyfin-web",
-      "ref": "master",
-      "name": "master",
-      "matrix": true,
-      "node24": true,
-      "latest": "9ac5ac07aff14fa929ccfdb9021966e7b6710b2a"
+    "10.11.z": {
+      "ref": "release-10.11.z",
+      "sha": "35c0793ece3adbd247eab290ae1effab851f3d37"
     }
-  ],
-  "releases": [
-    {
-      "owner": "jellyfin",
-      "repo": "jellyfin-web",
-      "latest": "v12.4",
-      "latestPre": "v12.4",
-      "matrix": true,
-      "default": true
-    }
-  ]
+  },
+  "osa_tizen": {
+    "repository": "jeppevinkel/jellyfin-tizen",
+    "ref": "feature/combine-avplay-smart-hub",
+    "sha": "a798c36118117aa8d6eb6f11da35d040907c8840"
+  }
 }
