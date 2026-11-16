@@ -77,6 +77,15 @@ jobs:
       - name: Create disposable author certificate
         run: |
           ./tizen-studio/tools/ide/bin/tizen certificate -a JellyfinOSA -p 1234 -c PT -s Lisboa -ct Lisboa -o LocalTest -n JellyfinOSA -e jellyfinosa@example.invalid -f tizencert
+          # Tizen Studio writes new certificates to its per-workspace keystore,
+          # not to the root of the checked-out repository.
+          cert="$GITHUB_WORKSPACE/tizen-studio-data/keystore/author/tizencert.p12"
+          if [ ! -s "$cert" ]; then
+            echo "::error::Tizen author certificate was not generated at $cert"
+            find "$GITHUB_WORKSPACE/tizen-studio-data/keystore/author" -maxdepth 1 -type f -print
+            exit 1
+          fi
+          cp "$cert" "$GITHUB_WORKSPACE/tizencert.p12"
           test -s "$GITHUB_WORKSPACE/tizencert.p12"
 
       - name: Configure Tizen certificate profile
