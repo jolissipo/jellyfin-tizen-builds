@@ -66,7 +66,7 @@ jobs:
       - name: Download Tizen Studio
         shell: bash
         run: |
-          curl --fail --location --retry 3 --output tizen-installer "https://download.tizen.org/sdk/Installer/tizen-studio_$TIZEN_STUDIO_VER/web-cli_Tizen_Studio_$TIZEN_STUDIO_VER_ubuntu-64.bin"
+          curl --fail --location --retry 3 --output tizen-installer "https://download.tizen.org/sdk/Installer/tizen-studio_${TIZEN_STUDIO_VER}/web-cli_Tizen_Studio_${TIZEN_STUDIO_VER}_ubuntu-64.bin"
 
       - name: Install Tizen Studio
         run: |
