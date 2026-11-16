@@ -201,7 +201,7 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           tag_name: avplayfix-${{ github.run_number }}-${{ github.run_attempt }}
-          name: Jellyfin OSA AVPlayFix build #${{ github.run_number }}
+          name: 'Jellyfin OSA AVPlayFix build #${{ github.run_number }}'
           body_path: release-notes.md
           files: release-artifacts/**/*.wgt
           fail_on_unmatched_files: true
